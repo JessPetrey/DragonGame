@@ -149,6 +149,10 @@ while True:
                         time.sleep(5)
                         # stop the game
                         running = False
+                        score = 0
+                        start_time = time.time()
+                        continue
+                        
                         
 
                 # Update the screen
