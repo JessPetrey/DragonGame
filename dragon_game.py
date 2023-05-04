@@ -17,7 +17,7 @@ screen_width = 1000
 screen_height = 800
 screen = pygame.display.set_mode((screen_width, screen_height))
 # set timer in seconds
-timer = 10
+timer = 30
 start_time = time.time()
 timer_font = pygame.font.SysFont("comicsansms", 30)
 
@@ -29,7 +29,7 @@ dragon_image = pygame.image.load("Dragon.png")
 dragon_image = pygame.transform.rotate(dragon_image, 180)
 dragon_rect = dragon_image.get_rect()
 # resize the dragon image
-dragon_image = pygame.transform.scale(dragon_image, (80, 80))
+dragon_image = pygame.transform.scale(dragon_image, (100, 100))
 dragon_rect.width, dragon_rect.height = dragon_image.get_size()
 # Set the initial position of the dragon
 dragon_rect.centerx = screen_width // 2
