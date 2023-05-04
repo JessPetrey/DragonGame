@@ -16,6 +16,10 @@ pygame.init()
 screen_width = 800
 screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
+fps = 60
+
+# create a clock object to control the game's framerate
+clock = pygame.time.Clock()
 
 # Load the dragon image and get its rect object
 dragon_image = pygame.image.load("Dragon.png")
@@ -31,7 +35,7 @@ dragon_rect.centerx = screen_width // 2
 dragon_rect.bottom = screen_height - 10
 
 # Set the dragon's movement speed
-dragon_speed = 3
+dragon_speed = 4
 
 # Load the treasure image and create a list to store the treasure objects
 treasure_image = pygame.image.load("treasures.png")
@@ -43,11 +47,15 @@ max_treasures = 5
 treasure_image = pygame.transform.scale(treasure_image, (50, 50))
 treasure_rect.width, treasure_rect.height = treasure_image.get_size()
 
+# set the speed of the treasure
+treasure_speed = 0.5
+
 # set the score to 0
 score = 0
 
 # Game loop
 while True:
+        clock.tick(fps)
         # Handle events
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -63,6 +71,7 @@ while True:
                 new_treasure_rect = pygame.Rect(treasure_x, treasure_y, treasure_rect.width, treasure_rect.height)
                 treasure_list.append(new_treasure_rect)
 
+
         # Move the dragon based on keyboard input
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and dragon_rect.left > 0:
@@ -74,20 +83,18 @@ while True:
         if keys[pygame.K_DOWN] and dragon_rect.bottom < screen_height:
                 dragon_rect.y += dragon_speed
 
-        # # add new treasures randomly
-        # if random.random() < 0.02:
-        #         # create a new treasure object
-        #         treasure_rect = treasure_image.get_rect()
-        #         treasure_rect.x = random.randint(0, screen_width - treasure_rect.width)
-        #         treasure_rect.y = random.randint(0, screen_height - treasure_rect.height)
-        #         treasure_list.append(treasure_rect)
 
         # Check for collisions with treasures
         for treasure_rect in treasure_list:
                 if dragon_rect.colliderect(treasure_rect):
                         treasure_list.remove(treasure_rect)
                         score += 1
-                        print("You have found a treasure!")
+                # move the treasure down the screen
+                treasure_rect.y += treasure_speed
+                # check if the treasure has moved off the bottom of the screen
+                if treasure_rect.top > screen_height:
+                        # remove the treasure from the list
+                        treasure_list.remove(treasure_rect)
 
         # Clear the screen
         screen.fill((255, 255, 255))
