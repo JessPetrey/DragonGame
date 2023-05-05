@@ -7,7 +7,6 @@ The game will end if the dragon collides with an obstacle or if the dragon reach
 import pygame
 import random
 import time
-import sys
 
 # Initialize pygame
 pygame.init()
@@ -17,7 +16,7 @@ screen_width = 1000
 screen_height = 800
 screen = pygame.display.set_mode((screen_width, screen_height))
 # set timer in seconds
-timer = 30
+timer = 60
 start_time = time.time()
 timer_font = pygame.font.SysFont("comicsansms", 30)
 
@@ -52,7 +51,7 @@ treasure_speed = 0.5
 # set the score to 0
 score = 0
 
-running = False
+game_is_running = False
 # Game loop
 while True:
         clock.tick(60)
@@ -65,22 +64,33 @@ while True:
                 elif event.type == pygame.KEYDOWN:
                         # start the game when the spacebar is pressed
                         if event.key == pygame.K_SPACE:
-                                running = True
+                                game_is_running = True
                         # stop the game when the escape key is pressed
                         elif event.key == pygame.K_ESCAPE:
-                                running = False
+                                game_is_running = False
         # if the game is not running, display a message to press spacebar to start the game
-        if not running:
+        if not game_is_running:
                 screen.fill((255, 255, 255))
+                # display the game title
+                game_title = pygame.font.SysFont("comicsansms", 60).render("Dragon's Hoard", True, (0, 0, 0))
+                game_title_rect = game_title.get_rect()
+                game_title_rect.center = (screen_width // 2, screen_height // 2 - 100)
+                screen.blit(game_title, game_title_rect)
+                # display the instruction to collect treasure in 60 seconds
+                game_description = pygame.font.SysFont("comicsansms", 15, italic=True).render("You have 60 seconds to collect treasure and grow your hoard.", True, (0, 0, 0))
+                game_description_rect = game_description.get_rect()
+                game_description_rect.center = (screen_width // 2, screen_height // 2 - 20)
+                screen.blit(game_description, game_description_rect)
+                # display the instruction to press spacebar to start the game
                 font = pygame.font.SysFont("comicsansms", 30)
                 text = font.render("Press SPACEBAR to Start", True, (0, 0, 0))
                 text_rect = text.get_rect()
-                text_rect.center = (screen_width // 2, screen_height // 2)
+                text_rect.center = (screen_width // 2, screen_height // 2 + 50)
                 screen.blit(text, text_rect)
                 pygame.display.update()
                 continue
 
-        if running:
+        if game_is_running:
                 # Move the dragon based on keyboard input
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_LEFT] and dragon_rect.left > 0:
@@ -122,10 +132,10 @@ while True:
                 for treasure_rect in treasure_list:
                         if dragon_rect.colliderect(treasure_rect):
                                 treasure_list.remove(treasure_rect)
-                                score += 1
-                # update the score
+                                score += 100
+                # update the score and display to the user as the "Treasure hoard"
                 font = pygame.font.Font(None, 36)
-                score_text = font.render("Score: " + str(score), True, (0, 0, 0))
+                score_text = font.render("Treasure Hoard: " + str(score), True, (0, 0, 0))
                 screen.blit(score_text, (10, 10))
                 
 
@@ -148,7 +158,7 @@ while True:
                         pygame.display.update()
                         time.sleep(5)
                         # stop the game
-                        running = False
+                        game_is_running = False
                         score = 0
                         start_time = time.time()
                         continue
