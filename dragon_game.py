@@ -7,6 +7,7 @@ The game will end if the dragon collides with an obstacle or if the dragon reach
 import pygame
 import random
 import time
+import sys
 
 # Initialize pygame
 pygame.init()
